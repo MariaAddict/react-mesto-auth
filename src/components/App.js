@@ -12,6 +12,7 @@ import { Route, Switch } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 
 function App() {
     const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(false);
@@ -126,6 +127,7 @@ function App() {
 
                         <Route path="/sign-up">
                             <Register /> 
+                            <InfoTooltip onClose={closeAllPopups} ></InfoTooltip>
                         </Route>
                         <Route path="/sign-in">
                             <Login />

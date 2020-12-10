@@ -8,8 +8,13 @@
     margin-top: 30px;
     border: 0;
     border-bottom: 2px solid #CCC;
+    color: #fff;
 }
 
 .login__input:first-of-type {
     margin-top: 0;
+}
+
+.login__input:focus {
+    background-color: #000 !important;
 }

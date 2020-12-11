@@ -152,12 +152,11 @@ function App() {
     }
 
     function handleLogin(password, email) {
-        console.log("user-login: ", password, email);
         auth.authorization(password, email)
             .then(data => {
-                console.log(data);
                 if (data.token) {
                     localStorage.setItem('jwt', data.token);
+                    setEmail(email);
                     setLoggetIn(true);
                     history.push('/');
                 }
@@ -172,7 +171,7 @@ function App() {
         auth.getContent(jwt)
         .then(data => {
             if (data) {
-                setEmail(data.email);
+                setEmail(data.data.email);
                 setLoggetIn(true);
                 history.push('/');
             }
@@ -188,11 +187,12 @@ function App() {
         setLoggetIn(false);
     }
 
+
     return (
         < CurrentUserContext.Provider value={currentUser}>
             <div className="App">
                 <div className="page">
-                    <Header link={headerLink} onClick = {signOut} />
+                    <Header link={headerLink} onClick = {signOut} email={email} loggedIn={loggedIn} />
 
                     <Switch>
 
@@ -217,7 +217,7 @@ function App() {
                     <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                     <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
                     <ImagePopup {...selectedCard} onClose={closeAllPopups} />
-                    <Footer />
+                    {loggedIn && <Footer /> }
                 </div>
             </div>
         </ CurrentUserContext.Provider >

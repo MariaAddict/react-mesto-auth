@@ -5,7 +5,7 @@ import logo from '../images/logo.svg';
 function Header(props) {
     function handleLilk() {
         if (props.loggedIn) {
-            props.onClick();
+            props.onSignOut();
         }
     }
 

@@ -192,7 +192,7 @@ function App() {
         < CurrentUserContext.Provider value={currentUser}>
             <div className="App">
                 <div className="page">
-                    <Header link={headerLink} onClick = {signOut} email={email} loggedIn={loggedIn} />
+                    <Header link={headerLink} onSignOut = {signOut} email={email} loggedIn={loggedIn} />
 
                     <Switch>
 

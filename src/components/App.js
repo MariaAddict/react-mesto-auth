@@ -182,11 +182,17 @@ function App() {
         });
     }
 
+    function signOut() {
+        localStorage.removeItem('jwt');
+        setEmail('');
+        setLoggetIn(false);
+    }
+
     return (
         < CurrentUserContext.Provider value={currentUser}>
             <div className="App">
                 <div className="page">
-                    <Header link={headerLink} />
+                    <Header link={headerLink} onClick = {signOut} />
 
                     <Switch>
 

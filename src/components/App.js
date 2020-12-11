@@ -151,7 +151,7 @@ function App() {
             });
     }
 
-    function handleLogin(password, email) {
+    function onLogin(password, email) {
         auth.authorization(password, email)
             .then(data => {
                 if (data.token) {
@@ -210,7 +210,7 @@ function App() {
                             <InfoTooltip registered={registered} isOpen={isInfoToolOpen} onClose={closeAllPopups} ></InfoTooltip>
                         </Route>
                         <Route path="/sign-in">
-                            <Login handleLogin={handleLogin} />
+                            <Login onLogin={onLogin} />
                         </Route>
                     </Switch>
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />

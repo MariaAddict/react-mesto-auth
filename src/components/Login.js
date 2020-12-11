@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-function Login({handleLogin}) {
+function Login({onLogin}) {
     const [data, setData] = useState({
         email: '',
         password: ''
@@ -15,7 +15,7 @@ function Login({handleLogin}) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        handleLogin(data.password, data.email);
+        onLogin(data.password, data.email);
     }
 
     return (

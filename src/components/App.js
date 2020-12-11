@@ -206,7 +206,7 @@ function App() {
                             cards={cards}
                         />
                         <Route path="/sign-up">
-                            <Register handleRegister={handleRegister} />
+                            <Register onRegister={handleRegister} />
                             <InfoTooltip registered={registered} isOpen={isInfoToolOpen} onClose={closeAllPopups} ></InfoTooltip>
                         </Route>
                         <Route path="/sign-in">

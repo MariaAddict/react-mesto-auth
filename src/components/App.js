@@ -8,11 +8,12 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
+import * as auth from '../auth';
 
 function App() {
     const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(false);
@@ -21,12 +22,15 @@ function App() {
     const [selectedCard, setSelectedCard] = React.useState({});
     const [currentUser, setCurrentUser] = React.useState({ about: '', avatar: '', cohort: '', name: '', _id: '' });
     const [cards, setCards] = React.useState([]);
-    // const {url , path} = useRouteMatch();
     const [headerLink, setHeaderLink] = React.useState({
         name: '',
         url: ''
     });
     const location = useLocation();
+    const [loggedIn, setLoggetIn] = React.useState(false);
+    const [isInfoToolOpen, setIsInfoToolOpen] = React.useState(false);
+    const [registered, setRegistered] = React.useState(false);
+    const history = useHistory();
 
     React.useEffect(() => {
         Promise.all([api.getUserInfo(), api.getInitialCards()]).then(([dataUser, dataCards]) => {
@@ -38,7 +42,6 @@ function App() {
     }, []);
 
     React.useEffect(() => {
-        console.log('location.pathname: ', location.pathname);
         if (location.pathname === '/sign-in') {
             setHeaderLink({
                 name: 'Регистрация',
@@ -76,6 +79,7 @@ function App() {
         setisAddPlacePopupOpen(false);
         setisEditProfilePopupOpen(false);
         setisEditAvatarPopupOpen(false);
+        setIsInfoToolOpen(false);
         setSelectedCard({});
     }
     function handleUpdateUser(data) {
@@ -124,6 +128,23 @@ function App() {
         });
     }
 
+    function handleRegister(password, email) {
+        console.log("user: ", password, email);
+        auth.register(password, email)
+            .then(data => {
+                console.log(data);
+                if (data) {
+                    setRegistered(true);
+                    setIsInfoToolOpen(true);
+                }
+            })
+            .catch(err => {
+                console.log(err.name);
+                setRegistered(false);
+                setIsInfoToolOpen(true);
+            });
+    }
+
 
     return (
         < CurrentUserContext.Provider value={currentUser}>
@@ -133,7 +154,7 @@ function App() {
 
                     <Switch>
 
-                        <ProtectedRoute exact path="/" component={Main}
+                        <ProtectedRoute exact path="/" loggedIn={loggedIn} component={Main}
                             onEditProfile={handleEditProfileClick}
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
@@ -142,20 +163,9 @@ function App() {
                             onCardLike={handleCardLike}
                             cards={cards}
                         />
-                        {/* <Main
-                            onEditProfile={handleEditProfileClick}
-                            onAddPlace={handleAddPlaceClick}
-                            onEditAvatar={handleEditAvatarClick}
-                            onCardClick={handleCardClick}
-                            onCardDelete={handleCardDelete}
-                            onCardLike={handleCardLike}
-                            cards={cards}
-                        /> */}
-
-
                         <Route path="/sign-up">
-                            <Register />
-                            {/* <InfoTooltip onClose={closeAllPopups} ></InfoTooltip> */}
+                            <Register handleRegister={handleRegister} />
+                            <InfoTooltip registered={registered} isOpen={isInfoToolOpen} onClose={closeAllPopups} ></InfoTooltip>
                         </Route>
                         <Route path="/sign-in">
                             <Login />

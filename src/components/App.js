@@ -8,7 +8,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
@@ -21,6 +21,12 @@ function App() {
     const [selectedCard, setSelectedCard] = React.useState({});
     const [currentUser, setCurrentUser] = React.useState({ about: '', avatar: '', cohort: '', name: '', _id: '' });
     const [cards, setCards] = React.useState([]);
+    // const {url , path} = useRouteMatch();
+    const [headerLink, setHeaderLink] = React.useState({
+        name: '',
+        url: ''
+    });
+    const location = useLocation();
 
     React.useEffect(() => {
         Promise.all([api.getUserInfo(), api.getInitialCards()]).then(([dataUser, dataCards]) => {
@@ -30,6 +36,28 @@ function App() {
             console.log(err);
         });
     }, []);
+
+    React.useEffect(() => {
+        console.log('location.pathname: ', location.pathname);
+        if (location.pathname === '/sign-in') {
+            setHeaderLink({
+                name: 'Регистрация',
+                url: '/sign-up'
+            });
+        };
+        if (location.pathname === '/sign-up') {
+            setHeaderLink({
+                name: 'Вход',
+                url: '/sign-in'
+            });
+        };
+        if (location.pathname === '/') {
+            setHeaderLink({
+                name: 'Выйти',
+                url: '/sign-in'
+            });
+        };
+    }, [location]);
 
 
     function handleEditAvatarClick() {
@@ -101,7 +129,7 @@ function App() {
         < CurrentUserContext.Provider value={currentUser}>
             <div className="App">
                 <div className="page">
-                    <Header />
+                    <Header link={headerLink} />
 
                     <Switch>
 
@@ -126,8 +154,8 @@ function App() {
 
 
                         <Route path="/sign-up">
-                            <Register /> 
-                            <InfoTooltip onClose={closeAllPopups} ></InfoTooltip>
+                            <Register />
+                            {/* <InfoTooltip onClose={closeAllPopups} ></InfoTooltip> */}
                         </Route>
                         <Route path="/sign-in">
                             <Login />

@@ -31,6 +31,7 @@ function App() {
     const [isInfoToolOpen, setIsInfoToolOpen] = React.useState(false);
     const [registered, setRegistered] = React.useState(false);
     const history = useHistory();
+    const [email, setEmail] = React.useState('');
 
     React.useEffect(() => {
         Promise.all([api.getUserInfo(), api.getInitialCards()]).then(([dataUser, dataCards]) => {
@@ -61,6 +62,11 @@ function App() {
             });
         };
     }, [location]);
+
+    React.useEffect(() => {
+        checkToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
 
     function handleEditAvatarClick() {
@@ -161,6 +167,20 @@ function App() {
             });
     }
 
+    function checkToken() {
+        const jwt = localStorage.getItem('jwt'); 
+        auth.getContent(jwt)
+        .then(data => {
+            if (data) {
+                setEmail(data.email);
+                setLoggetIn(true);
+                history.push('/');
+            }
+        })
+        .catch(err => {
+            console.log(err.name);
+        });
+    }
 
     return (
         < CurrentUserContext.Provider value={currentUser}>

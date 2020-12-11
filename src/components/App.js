@@ -145,6 +145,22 @@ function App() {
             });
     }
 
+    function handleLogin(password, email) {
+        console.log("user-login: ", password, email);
+        auth.authorization(password, email)
+            .then(data => {
+                console.log(data);
+                if (data.token) {
+                    localStorage.setItem('jwt', data.token);
+                    setLoggetIn(true);
+                    history.push('/');
+                }
+            })
+            .catch(err => {
+                console.log(err.name);
+            });
+    }
+
 
     return (
         < CurrentUserContext.Provider value={currentUser}>
@@ -168,7 +184,7 @@ function App() {
                             <InfoTooltip registered={registered} isOpen={isInfoToolOpen} onClose={closeAllPopups} ></InfoTooltip>
                         </Route>
                         <Route path="/sign-in">
-                            <Login />
+                            <Login handleLogin={handleLogin} />
                         </Route>
                     </Switch>
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />

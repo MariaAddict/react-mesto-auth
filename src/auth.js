@@ -10,3 +10,14 @@ export const register = (password, email) => {
     })
     .then((response) => response.ok ? response.json() : Promise.reject(`ошибка: ${response.status}`));
   }; 
+
+export const authorization = (password, email) => {
+    return fetch(`${BASE_URL}/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({password, email})
+      })
+      .then((response) => response.ok ? response.json() : Promise.reject(`ошибка: ${response.status}`));
+};

@@ -148,7 +148,7 @@ function App() {
                 }
             })
             .catch(err => {
-                console.log(err.name);
+                console.log(err);
                 setRegistered(false);
                 setIsInfoToolOpen(true);
             });
@@ -165,7 +165,7 @@ function App() {
                 }
             })
             .catch(err => {
-                console.log(err.name);
+                console.log(err);
             });
     }
 
@@ -185,7 +185,7 @@ function App() {
                 }
             })
             .catch(err => {
-                console.log(err.name);
+                console.log(err);
             });
     }
 

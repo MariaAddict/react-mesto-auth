@@ -61,10 +61,7 @@ function App() {
                 url: '/sign-in'
             });
         };
-        if (location.pathname === '/react-mesto-auth') {
-            loggedIn ? history.push('/') : history.push('/sign-in');
-        };
-    }, [location, history, loggedIn ]);
+    }, [location]);
 
     React.useEffect(() => {
         checkToken();

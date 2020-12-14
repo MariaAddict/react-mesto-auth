@@ -61,12 +61,15 @@ function App() {
                 url: '/sign-in'
             });
         };
-    }, [location]);
+        if (location.pathname === '/react-mesto-auth') {
+            loggedIn ? history.push('/') : history.push('/sign-in');
+        };
+    }, [location, history, loggedIn ]);
 
     React.useEffect(() => {
         checkToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     function handleEditAvatarClick() {
@@ -167,18 +170,23 @@ function App() {
     }
 
     function checkToken() {
-        const jwt = localStorage.getItem('jwt'); 
+        const jwt = localStorage.getItem('jwt');
         auth.getContent(jwt)
-        .then(data => {
-            if (data) {
-                setEmail(data.data.email);
-                setLoggetIn(true);
-                history.push('/');
-            }
-        })
-        .catch(err => {
-            console.log(err.name);
-        });
+            .then(data => {
+                if (data) {
+                    console.log('check token data IF: ', data);
+                    setEmail(data.data.email);
+                    setLoggetIn(true);
+                    history.push('/');
+                }
+                else {
+                    console.log('check token data ELSE: ', data);
+                    history.push('/sign-in');
+                }
+            })
+            .catch(err => {
+                console.log(err.name);
+            });
     }
 
     function signOut() {
@@ -192,7 +200,7 @@ function App() {
         < CurrentUserContext.Provider value={currentUser}>
             <div className="App">
                 <div className="page">
-                    <Header link={headerLink} onSignOut = {signOut} email={email} loggedIn={loggedIn} />
+                    <Header link={headerLink} onSignOut={signOut} email={email} loggedIn={loggedIn} />
 
                     <Switch>
 
@@ -217,7 +225,7 @@ function App() {
                     <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                     <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
                     <ImagePopup {...selectedCard} onClose={closeAllPopups} />
-                    {loggedIn && <Footer /> }
+                    {loggedIn && <Footer />}
                 </div>
             </div>
         </ CurrentUserContext.Provider >
